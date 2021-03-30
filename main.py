@@ -75,6 +75,15 @@ def mul_mat(mat1,mat2):
     return new_mat
 
 
+def max_pivot_index(col):
+    max_index = 0
+    max = col[0]
+    for i in range(len(col)):
+        if max < col[i]:
+            max = col[i]
+            max_index = i
+    return max_index
+
 x = [[1,3,5,9],[1,3,1,7],[4,3,9,7],[5,2,0,9]]
 #print_mat(x)
 #print(determinant(x))
