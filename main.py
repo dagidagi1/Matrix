@@ -74,6 +74,17 @@ def mul_mat(mat1,mat2):
         new_mat.append(row)
     return new_mat
 
+def init_id_mat(size):
+    mat = []
+    for i in range(size):
+        new_row = []
+        for j in range(size):
+            if i == j:
+                new_row.append(1)
+            else:
+                new_row.append(0)
+        mat.append(new_row)
+    return mat
 
 def max_pivot_index(col):
     max_index = 0
