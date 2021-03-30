@@ -47,6 +47,8 @@ def remove_col(x, i):
 def mul_row(row, multiplier):
     return [i * multiplier for i in row]
 
+def add_rows(row1,row2):
+    return [row1[i] + row2[i] for i in range(len(row1))]
 
 def get_col(mat, i):
     col = []
@@ -85,6 +87,34 @@ def init_id_mat(size):
                 new_row.append(0)
         mat.append(new_row)
     return mat
+def element_mat(size, row1_index, row2_index, multiplier):
+    #row1 <-- row1 + multiplier * row2
+    elem = init_id_mat(size)
+    elem[row1_index] = add_rows(elem[row1_index], mul_row(elem[row2_index],multiplier))
+    return elem
+
+def find_singular(mat):
+    size = len(mat)
+    sing = init_id_mat(size)
+    for piv in range(size):
+            if mat[piv][piv] == 0:
+                mat[piv], mat[piv + 1] = mat[piv + 1], mat[piv]
+                sing[piv], sing[piv + 1] = sing[piv + 1], sing[piv]
+            if mat[piv][piv] != 1:
+                elem = init_id_mat(size)
+                elem[piv][piv] = 1/mat[piv][piv] #pivot
+                mat = mul_mat(elem, mat)
+                sing = mul_mat(elem, sing)
+            if piv != size:
+                for i in range(piv + 1, size):
+                    elem = element_mat(size, i, piv, -mat[i][piv])
+                    mat, sing = mul_mat(elem, mat), mul_mat(elem, sing)
+    for piv in range(size - 1, -1, -1):
+            for i in range(piv - 1):
+                elem = element_mat(size, i, piv, -mat[i][piv])
+                mat, sing = mul_mat(elem, mat), mul_mat(elem, sing)
+    return mat
+
 
 def max_pivot_index(col):
     max_index = 0
@@ -96,8 +126,8 @@ def max_pivot_index(col):
     return max_index
 
 x = [[1,3,5,9],[1,3,1,7],[4,3,9,7],[5,2,0,9]]
-#print_mat(x)
-#print(determinant(x))
-
-x1 = [[1,2,0],[4,3,-1]]
-x2 = [[5,1],[2,3],[3,4]]
+print_mat(x)
+print(determinant(x))
+print_mat(find_singular(x))
+#x1 = [[1,2,0],[4,3,-1]]
+#x2 = [[5,1],[2,3],[3,4]]
