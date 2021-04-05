@@ -135,3 +135,139 @@ print(determinant(x))
 print_mat(find_singular(x))
 #x1 = [[1,2,0],[4,3,-1]]
 #x2 = [[5,1],[2,3],[3,4]]
+
+
+def init_id_mat(size):
+    id_mat = []
+    for i in range(size):
+        row = []
+        for j in range(size):
+            if i == j:
+                row.append(1)
+            else:
+                row.append(0)
+        id_mat.append(row)
+    return id_mat
+
+
+def print_mat(mat):
+    for i in mat:
+        print(*i)
+
+
+def way_A(mat, b):
+    inv_mat = invert_mat(mat)
+    return mul_mat(inv_mat, b)
+
+
+def way_B(mat, b):
+    l_mat = init_id_mat(len(mat))
+    for j in range(len(mat)):  # columns
+        m_mat = init_id_mat(len(mat))
+        p_mat = init_id_mat(len(mat))
+        for i in range(j, len(mat)):  # rows
+            if i == j:
+                max_piv = abs(mat[i][i])
+                max_index = i
+                for k in range(i+1, len(mat)):
+                    if abs(mat[k][j]) > max_piv:
+                        max_index = k
+                        max_piv = abs(mat[k][j])
+                if max_index != i:
+                    mat[i], mat[max_index] = mat[max_index], mat[i]
+                    p_mat[i], p_mat[max_index] = p_mat[max_index], p_mat[i]
+            elif mat[i][j] != 0:
+                m_mat[i][j] = -(mat[i][j]/mat[j][j])
+        mat = mul_mat(m_mat, mat)
+        l_mat = mul_mat(mul_mat(m_mat, p_mat), l_mat)
+    temp_mat = mul_mat(l_mat, b)
+    temp_mat = mul_mat(invert_mat(mat), temp_mat)
+    return temp_mat
+
+
+def mul_mat(mat1, mat2):
+    def get_col(mat, i):
+        col = []
+        for _ in mat:
+            col.append(_[i])
+        return col
+
+    def mul_row_col(row, col):
+        x = 0
+        for i in range(len(row)):
+            x += row[i] * col[i]
+        return x
+
+    if len(mat1[0]) != len(mat2):
+        print("Can't multiply this matrix!")
+        return None
+    new_mat = []
+    for i in range(len(mat1)):
+        row = []
+        for j in range(len(mat2[0])):
+            row.append(mul_row_col(mat1[i], get_col(mat2, j)))
+        new_mat.append(row)
+    return new_mat
+
+
+def invert_mat(mat):
+    inv_mat = init_id_mat(len(mat))
+    for j in range(len(mat)):
+        for i in range(j, len(mat)):
+            elem_mat = init_id_mat(len(mat))
+            if i == j:
+                if mat[i][j] == 0:
+                    for k in range(i, len(mat)):
+                        if mat[k][j] != 0:
+                            elem_mat[k], elem_mat[i] = elem_mat[i], elem_mat[k]
+                    mat = mul_mat(elem_mat, mat)
+                    inv_mat = mul_mat(elem_mat, inv_mat)
+                elif mat[i][j] == 1:
+                    continue
+                else:
+                    elem_mat[i][j] = 1/mat[i][j]
+                    mat = mul_mat(elem_mat, mat)
+                    inv_mat = mul_mat(elem_mat, inv_mat)
+            else:
+                elem_mat[i][j] = -mat[i][j]/mat[j][j]
+                mat = mul_mat(elem_mat, mat)
+                inv_mat = mul_mat(elem_mat, inv_mat)
+    for j in range(len(mat)-1, 0, -1):
+        for i in range(j-1, -1, -1):
+            elem_mat = init_id_mat(len(mat))
+            elem_mat[i][j] = -mat[i][j]/mat[j][j]
+            mat = mul_mat(elem_mat, mat)
+            inv_mat = mul_mat(elem_mat, inv_mat)
+    return inv_mat
+
+
+def determinant(mat):
+    def sub_mat_for_det(piv):
+        def remove_row(x, i):
+            new_mat = x.copy()
+            new_mat.pop(i)
+            return new_mat
+
+        def remove_col(x, i):
+            new_mat = x.copy()
+            for _ in range(len(new_mat)):
+                new_mat[_] = new_mat[_][:i] + new_mat[_][i + 1:]
+            return new_mat
+        new_mat = remove_row(mat, 0)
+        new_mat = remove_col(new_mat, piv)
+        return new_mat
+    if len(mat) == 2:
+        return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0]
+    sign = 1
+    det = 0
+    for i in range(len(mat[0])):
+        det += sign * mat[0][i] * determinant(sub_mat_for_det(i))
+        sign *= -1
+    return det
+
+
+mat_A, b = input_mat()
+if determinant(mat_A) != 0:
+    print_mat(way_A(mat_A, b))
+else:
+    print_mat(way_B(mat_A, b))
