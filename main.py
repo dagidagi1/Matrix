@@ -1,13 +1,17 @@
 def input_mat():
-    x = input("Please enter matrix size: ")
+    x = int(input("Please enter matrix size: "))
     mat = []
-    row_list = []
     for row in range(x):
+        row_list = []
         for col in range(x):
-            row_list[col] = input("row: {0} col : {1}......".format(row,col))
-        mat[row] = row_list
-    return mat
-
+            row_list.append(float(input("row: {0} col : {1}......".format(row+1, col+1))))
+        mat.append(row_list)
+    b = []
+    print('Enter b-vector:')
+    for i in range(x):
+        temp = [float(input())]
+        b.append(temp)
+    return mat, b
 
 def print_mat(mat):
     for i in mat:
