@@ -1,3 +1,5 @@
+#Arkadi Yakubov 208064162
+#Mikhail diachkov 336426176
 def input_mat():
     x = int(input("Please enter matrix size: "))
     mat = []
