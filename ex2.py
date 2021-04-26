@@ -1,6 +1,26 @@
 from Ex1 import *
-
 index = 0
+def dominant_diagonal(mat, b):
+    def extract_col(index, mat):
+        col = []
+        for i in range(len(mat)):
+            col.append(mat[i][index])
+        return col
+    def max_pivot_index(vec):
+        max_index = 0
+        for i in range(len(vec)):
+            if vec[i] > vec[max_index]:
+                max_index = i
+        return max_index
+    def swap_rows(mat, from_index, to_index):
+        mat[to_index], mat[from_index] = mat[from_index], mat[to_index]
+        return mat
+    def swap_cols(mat, from_index, to_index):
+        for i in range(len(mat)):
+            mat[i][from_index], mat[i][to_index] = mat[i][to_index], mat[i][from_index]
+        return mat
+    #for i in range(mat):
+
 def yakobi(mat, vec_b):
     eps = 0.00001
     size = len(mat)
@@ -9,7 +29,6 @@ def yakobi(mat, vec_b):
         for i in range(len(vec)):
             print("%.6f" % vec[i][0], end = "\t")
         print("\n")
-
     def init_zero_mat(size):
         mat = []
         for i in range(size):
@@ -65,15 +84,16 @@ def yakobi(mat, vec_b):
         return step(next_x_r)
 
     u_mat, l_mat, d_mat = decomposition(mat)
-    d_mat = invert_mat(d_mat)
-    #yakobi
+    d_mat = invert_mat(d_mat)#we use only inverted D.
+    #yakobi G and H mats
     g_mat = minus_mat(mul_mat(d_mat, add_mat(l_mat, u_mat)))
     h_mat = d_mat
-    #gaos
+    #gaos G and H mats, dont work, dividing by zero error
     #g_mat =mul_mat(minus_mat(add_mat(l_mat,d_mat)), u_mat)
     #h_mat =invert_mat(add_mat(l_mat,d_mat))
-    print_mat(step(init_def_vector(size)))
+
+    return step(init_def_vector(size))
 
 x1= [[4,2,0],[2,10,4],[0,4,5]]
 x2 = [[3,-1,1],[0,1,-1],[1,1,-2]]
-yakobi(x2,[[4],[-1],[-3]])
+print_mat(yakobi(x1,[[2],[6],[5]]))
