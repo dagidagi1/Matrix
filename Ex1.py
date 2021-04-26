@@ -173,5 +173,5 @@ def example():
         print_mat(mul_mat(invert_mat(example_mat), vector_b))
 
 
-example()
+#example()
 
