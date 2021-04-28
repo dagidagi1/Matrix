@@ -1,25 +1,36 @@
 from Ex1 import *
 index = 0
 def dominant_diagonal(mat, b):
-    def extract_col(index, mat):
+    def extract_col(index):
         col = []
         for i in range(len(mat)):
             col.append(mat[i][index])
         return col
     def max_pivot_index(vec):
-        max_index = 0
+        #check if there is a pivot that greater than abs sum of other elements.
+        #if no such element return (-1)
+        max_index = -1
+        vec_sum = sum(map(abs, vec))
         for i in range(len(vec)):
-            if vec[i] > vec[max_index]:
+            if vec[i] > vec_sum - abs(vec[i]):
                 max_index = i
         return max_index
     def swap_rows(mat, from_index, to_index):
         mat[to_index], mat[from_index] = mat[from_index], mat[to_index]
         return mat
-    def swap_cols(mat, from_index, to_index):
+    def swap_cols(from_index, to_index):
         for i in range(len(mat)):
             mat[i][from_index], mat[i][to_index] = mat[i][to_index], mat[i][from_index]
         return mat
-    #for i in range(mat):
+    flag = True
+    for i in range(len(mat)):
+        col_pivot = max_pivot_index(mat[i][i:]) + i
+        if col_pivot > i:
+            swap_cols(col_pivot, i)
+        if col_pivot == -1:
+            flag = False
+    return mat, flag
+
 
 def yakobi(mat, vec_b):
     eps = 0.00001
@@ -94,6 +105,6 @@ def yakobi(mat, vec_b):
 
     return step(init_def_vector(size))
 
-x1= [[4,2,0],[2,10,4],[0,4,5]]
+x1= [[4,2,0],[0,4,5],[2,10,4]]
 x2 = [[3,-1,1],[0,1,-1],[1,1,-2]]
-print_mat(yakobi(x1,[[2],[6],[5]]))
+#print_mat(yakobi(x1,[[2],[6],[5]]))
