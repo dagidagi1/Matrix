@@ -16,15 +16,16 @@ eps = 0.0001
 def newton_raphson(polynom, start, end):
     x = sp.symbols('x')
     f = lambdify(x,polynom)
-    f_dif = polynom.sp.diff(polynom,x)
+    f_dif = sp.diff(polynom,x)
     f_dif = lambdify(x,f_dif)
     counter = 0
+    x_next = (start + end) / 2
     while(f(x_next) != 0):
         counter+=1
         print(counter)
-        x_current = (start + end) / 2
+        x_current = x_next
         x_next = x_current - f(x_current)/f_dif(x_current)
-    print(x_next)
+    return x_next, counter
 
 
-newton_raphson(my_f,-2,0)
+newton_raphson(my_f,-8,0)
