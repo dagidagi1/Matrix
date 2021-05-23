@@ -30,17 +30,44 @@ def newton_raphson(polynom, start, end):
 def bisection_method(polynom, start, end):
     x = sp.symbols('x')
     f = lambdify(x, polynom)
+    f_dif = sp.diff(polynom, x)
+    f_dif = lambdify(x, f_dif)
     x_l = start
     x_r = end
     counter = 0
-    while(x_r - x_l > eps):
-        counter += 1
-        x_c = (x_l + x_r) / 2
-        if(f(x_c) * f(x_r)) < 0:
-            x_l = x_c
-        else:
-            x_r = x_c
+    x_c = 1
+    if (f(x_l) * f(x_r)) < 0:
+        while (x_r - x_l > eps):
+            counter += 1
+            x_c = (x_l + x_r) / 2
+            if(f(x_c) * f(x_r)) < 0:
+                x_l = x_c
+            else:
+                x_r = x_c
+    else:
+        while (abs(x_r - x_l) > eps):
+            counter += 1
+            x_c = (x_l + x_r) / 2
+            if (f_dif(x_c) * f_dif(x_r)) < 0:
+                x_l = x_c
+            else:
+                x_r = x_c
+    print(x_c)
     return x_c, counter
 
-bisection_method(my_f,-8,1)
+def secant_method(polynom, start, end):
+    x = sp.symbols('x')
+    f = lambdify(x, polynom)
+    x_current = start
+    x_prev = end
+    counter = 0
+    while(abs(x_current - x_prev) > eps):
+        counter += 1
+        x_next = (x_prev*f(x_current) - x_current*f(x_prev)) / (f(x_current) - f(x_prev))
+        x_prev = x_current
+        x_current = x_next
+    print(x_current)
+    return x_current, counter
+f1 = x**4 +x**3-3*x**2
+bisection_method(f1,-0.1,0.1)
 #newton_raphson(my_f,-8,0)
