@@ -27,5 +27,20 @@ def newton_raphson(polynom, start, end):
         x_next = x_current - f(x_current)/f_dif(x_current)
     return x_next, counter
 
+def bisection_method(polynom, start, end):
+    x = sp.symbols('x')
+    f = lambdify(x, polynom)
+    x_l = start
+    x_r = end
+    counter = 0
+    while(x_r - x_l > eps):
+        counter += 1
+        x_c = (x_l + x_r) / 2
+        if(f(x_c) * f(x_r)) < 0:
+            x_l = x_c
+        else:
+            x_r = x_c
+    return x_c, counter
 
-newton_raphson(my_f,-8,0)
+bisection_method(my_f,-8,1)
+#newton_raphson(my_f,-8,0)
