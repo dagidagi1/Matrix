@@ -51,7 +51,3 @@ def secant_method(polynom, start, end):
         x_current = x_next
     print(x_current)
     return [x_current, counter]
-
-
-f = x**4 + x**3 - 3*x**2
-print(bisection_method(f, -0.1, 4))
