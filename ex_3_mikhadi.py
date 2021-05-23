@@ -3,19 +3,19 @@ import ex_3_dagi
 
 
 def input_data():
-    global func, start, end, x
+    global polynomial, start, end, x
     deg = int(input("Which degree of function?: "))
     print("Enter function")
     for i in range(deg, -1, -1):
         t = float(input(f"(x**{i})*"))
-        func += t*x**i
+        polynomial += t * x ** i
     start = float(input("Start point: "))
     end = float(input("End point: "))
-    print(f"Your func: {func}, Range[{start},{end}]")
+    print(f"Your func: {polynomial}, Range[{start},{end}]")
 
 
 def main():
-    global func, start, end, x
+    global polynomial, start, end, x
     print("""Choose preferred method:
     1 - Bisection method
     2 - Newton-Raphson method
@@ -30,14 +30,16 @@ def main():
         method = ex_3_dagi.secant_method
     else:
         print("Error")
-    func = sp.lambdify(x, func)
+    polynomial = sp.lambdify(x, polynomial)
+    solution = []
     while start < end:
-        print(start, start+0.1)
+        if polynomial(start)*polynomial(start + 0.1) < 0:
+            solution.append(method(polynomial, start, end))
         start += 0.1
 
 
 x = sp.symbols('x')
-func = 0
+polynomial = 0
 start = 0
 end = 0
 input_data()
