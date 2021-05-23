@@ -30,12 +30,25 @@ def main():
         method = ex_3_dagi.secant_method
     else:
         print("Error")
-    polynomial = sp.lambdify(x, polynomial)
+    func = sp.lambdify(x, polynomial)
+    p_dif = sp.diff(polynomial, x)
+    f_dif = sp.lambdify(x, p_dif)
     solution = []
     while start < end:
-        if polynomial(start)*polynomial(start + 0.1) < 0:
-            solution.append(method(polynomial, start, end))
+        if func(start)*func(start + 0.1) < 0:
+            temp = method(polynomial, start, (start + 0.1))
+            if temp is not None:
+                solution.append(temp)
+        elif method == ex_3_dagi.bisection_method:
+            if f_dif(start)*f_dif(start+0.1) < 0:
+                temp = method(p_dif, start, (start + 0.1))
+                if temp is not None:
+                    if func(temp[0]) == 0:
+                        solution.append(temp)
         start += 0.1
+    for i in solution:
+        if i is not None:
+            print(f"{i[0]}, found within {i[1]} attempts")
 
 
 x = sp.symbols('x')
