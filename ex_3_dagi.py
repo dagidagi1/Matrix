@@ -1,6 +1,15 @@
 import sympy as sp
 from sympy.utilities import lambdify
 from sympy.utilities.lambdify import lambdify
+x =sp.symbols('x')
+my_f=x**3+2*x+5
+#print("my_func: ",my_f)
+#my_f1=sp.diff( my_f,x)
+#print("f' : ",my_f1)
+#f = lambdify(x,my_f1)
+#print("f'(3): ",f(3))
+#d1=sp.diff(my_f1)
+#print("f'': ",d1)
 
 
 eps = 0.0001
@@ -59,3 +68,6 @@ def secant_method(polynom, start, end):
         x_current = x_next
     print(x_current)
     return x_current, counter
+f1 = x**4 +x**3-3*x**2
+bisection_method(f1,-0.1,0.1)
+#newton_raphson(my_f,-8,0)
