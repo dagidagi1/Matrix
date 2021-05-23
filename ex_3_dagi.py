@@ -27,13 +27,20 @@ def bisection_method(polynom, start, end):
     x_r = end
     counter = 0
     x_c = (x_l + x_r) / 2
-    while abs(x_r - x_l) > eps and f(x_c) != 0:
+    while abs(x_r - x_l) > eps:
         counter += 1
         x_c = (x_l + x_r) / 2
         if(f(x_c) * f(x_r)) < 0:
             x_l = x_c
-        else:
+        elif(f(x_c) * f(x_r)) > 0:
             x_r = x_c
+        else:
+            if f(x_c) == 0:
+                print("center-", x_c)
+                return [x_c, counter]
+            else:
+                print("right- ",x_r)
+                return [x_r, counter]
         if counter > max_iterations:
             print("cannot resolve")
             return None
@@ -51,3 +58,5 @@ def secant_method(polynom, start, end):
         x_current = x_next
     print(x_current)
     return [x_current, counter]
+f = x**4 + x**3 - 3*x**2
+print(bisection_method(sp.diff(f,x),-1,0.5))
