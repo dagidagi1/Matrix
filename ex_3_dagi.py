@@ -68,6 +68,3 @@ def secant_method(polynom, start, end):
         x_current = x_next
     print(x_current)
     return x_current, counter
-f1 = x**4 +x**3-3*x**2
-bisection_method(f1,-0.1,0.1)
-#newton_raphson(my_f,-8,0)
