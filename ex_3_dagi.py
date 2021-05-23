@@ -1,4 +1,7 @@
 import sympy as sp
+from math import log
+from math import exp
+from math import ceil
 from sympy.utilities import lambdify
 from sympy.utilities.lambdify import lambdify
 x =sp.symbols('x')
@@ -29,13 +32,16 @@ def newton_raphson(polynom, start, end):
 
 def bisection_method(polynom, start, end):
     x = sp.symbols('x')
-    f = lambdify(x, polynom)
     f_dif = sp.diff(polynom, x)
+    f = lambdify(x, polynom)
     f_dif = lambdify(x, f_dif)
     x_l = start
     x_r = end
+    #check maximum number of iterations depends on error size.
+    max_iterations = log(eps / (end-start), exp(1))
+    max_iterations /= -log(2, exp(1))
+    max_iterations = ceil(max_iterations)
     counter = 0
-    x_c = 1
     if (f(x_l) * f(x_r)) < 0:
         while (x_r - x_l > eps):
             counter += 1
@@ -44,16 +50,23 @@ def bisection_method(polynom, start, end):
                 x_l = x_c
             else:
                 x_r = x_c
+            if (counter > max_iterations):
+                print("cannot solve")
+                return
     else:
-        while (abs(x_r - x_l) > eps):
+        while (abs(x_r - x_l) > eps and f(x_c) !=0):
             counter += 1
             x_c = (x_l + x_r) / 2
             if (f_dif(x_c) * f_dif(x_r)) < 0:
                 x_l = x_c
             else:
                 x_r = x_c
-    print(x_c)
+            if(counter > max_iterations):
+                print("cannot solve")
+                return
     return x_c, counter
+
+
 
 def secant_method(polynom, start, end):
     x = sp.symbols('x')
@@ -69,5 +82,5 @@ def secant_method(polynom, start, end):
     print(x_current)
     return x_current, counter
 f1 = x**4 +x**3-3*x**2
-bisection_method(f1,-0.1,0.1)
+bisection_method(f1,-6,-1)
 #newton_raphson(my_f,-8,0)
