@@ -2,8 +2,6 @@ import sympy as sp
 from sympy.utilities.lambdify import lambdify
 from math import exp, log, ceil
 x = sp.symbols('x')
-
-
 eps = 0.0001
 def newton_raphson(polynom, start, end):
     f = lambdify(x,polynom)
@@ -34,13 +32,6 @@ def bisection_method(polynom, start, end):
             x_l = x_c
         elif(f(x_c) * f(x_r)) > 0:
             x_r = x_c
-        else:
-            if f(x_c) == 0:
-                print("center-", x_c)
-                return [x_c, counter]
-            else:
-                print("right- ",x_r)
-                return [x_r, counter]
         if counter > max_iterations:
             print("cannot resolve")
             return None
@@ -58,5 +49,3 @@ def secant_method(polynom, start, end):
         x_current = x_next
     print(x_current)
     return [x_current, counter]
-f = x**4 + x**3 - 3*x**2
-print(bisection_method(sp.diff(f,x),-1,0.5))
