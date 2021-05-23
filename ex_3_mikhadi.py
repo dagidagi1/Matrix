@@ -23,7 +23,7 @@ def main():
     choice = int(input())
     method = None
     if choice == 1:
-        method = ex_3_dagi.bisection_method
+        method = bisection_method
     elif choice == 2:
         method = ex_3_dagi.newton_raphson
     elif choice == 3:
@@ -39,7 +39,7 @@ def main():
             temp = method(polynomial, start, (start + 0.1))
             if temp is not None:
                 solution.append(temp)
-        elif method == ex_3_dagi.bisection_method:
+        elif method == bisection_method:
             if f_dif(start)*f_dif(start+0.1) < 0:
                 temp = method(p_dif, start, (start + 0.1))
                 if temp is not None:
@@ -51,7 +51,24 @@ def main():
             print(f"{i[0]}, found within {i[1]} attempts")
 
 
+def bisection_method(polynom, start, end):
+    func = sp.lambdify(x, polynom)
+    x_l = start
+    x_r = end
+    counter = 0
+    x_c = 1
+    while abs(x_r - x_l) > eps:
+        counter += 1
+        x_c = (x_l + x_r) / 2
+        if (func(x_l) * func(x_c)) > 0:
+            x_l = x_c
+        else:
+            x_r = x_c
+    return x_c, counter
+
+
 x = sp.symbols('x')
+eps = 0.0001
 polynomial = 0
 start = 0
 end = 0
