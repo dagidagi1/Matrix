@@ -1,5 +1,5 @@
 #Arkadi Yakubov 208064162
-#Mikhail diachkov 336426176
+#Mikhail diachkov 336426176.
 from Ex1 import print_mat
 def mat_solve(mat, vec_b):
     def init_id_mat(size):
